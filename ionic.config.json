@@ -1,0 +1,7 @@
+{
+  "name": "karin",
+  "integrations": {
+    "capacitor": {}
+  },
+  "type": "vue"
+}
