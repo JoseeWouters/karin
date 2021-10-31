@@ -48,7 +48,8 @@
       <ion-button @click="saveMedTaken">Toevoegen</ion-button>
       <ion-list>
         <ion-item v-for="medTaken in recentMedsTaken" :key="medTaken.date">
-          <ion-label>{{medTaken}}</ion-label>
+          <ion-label>{{medTaken.dateTime}}</ion-label>
+          <p><span>{{medTaken.leftOrRight}}</span> - <span>{{medTaken.place}}</span></p>
         </ion-item>
       </ion-list>
     </ion-content>
@@ -123,7 +124,7 @@ export default {
         const medsTaken = res ? res : [];
         medsTaken.push(currentMedTaken);
         storage.set("medsTaken", medsTaken);
-        this.getMedsTaken();
+        this.sortRecentMedsTaken(medsTaken);
       });
     },
   },
