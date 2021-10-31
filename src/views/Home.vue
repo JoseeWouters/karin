@@ -46,6 +46,11 @@
         </ion-item>
       </ion-radio-group>
       <ion-button @click="saveMedTaken">Toevoegen</ion-button>
+      <ion-list>
+        <ion-item v-for="medTaken in recentMedsTaken" :key="medTaken.date">
+          <ion-label>{{medTaken}}</ion-label>
+        </ion-item>
+      </ion-list>
     </ion-content>
   </ion-page>
 </template>
@@ -63,7 +68,9 @@ import {
   IonItem,
   IonRadio,
   IonRadioGroup,
+  IonList,
 } from "@ionic/vue";
+import { orderBy } from "lodash";
 import { Storage } from "@ionic/storage";
 const storage = new Storage();
 export default {
@@ -80,28 +87,43 @@ export default {
     IonItem,
     IonRadio,
     IonRadioGroup,
+    IonList,
   },
   data() {
     return {
       dateTime: `${new Date()}`,
       leftOrRight: "",
       place: "",
+      recentMedsTaken: [],
     };
   },
   async mounted() {
     await storage.create();
+    this.getMedsTaken();
   },
   methods: {
+    async getMedsTaken() {
+      const medsTaken = await storage.get("medsTaken");
+
+      this.sortRecentMedsTaken(medsTaken);
+    },
+
+    sortRecentMedsTaken(medsTaken) {
+      this.recentMedsTaken = orderBy(medsTaken, "dateTime", "desc").slice(0,3);
+    },
+
     async saveMedTaken() {
       const currentMedTaken = {
-        dateTime: this.dateTime,
+        dateTime: new Date(this.dateTime).toISOString(),
         leftOrRight: this.leftOrRight,
         place: this.place,
       };
+
       await storage.get("medsTaken").then( (res) => {
         const medsTaken = res ? res : [];
         medsTaken.push(currentMedTaken);
         storage.set("medsTaken", medsTaken);
+        this.getMedsTaken();
       });
     },
   },
