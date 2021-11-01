@@ -73,6 +73,7 @@ import {
 } from "@ionic/vue";
 import { orderBy } from "lodash";
 import { Storage } from "@ionic/storage";
+import moment from 'moment';
 const storage = new Storage();
 export default {
   name: "Home",
@@ -92,7 +93,7 @@ export default {
   },
   data() {
     return {
-      dateTime: `${new Date()}`,
+      dateTime: `${moment().format()}`,
       leftOrRight: "",
       place: "",
       recentMedsTaken: [],
@@ -115,7 +116,7 @@ export default {
 
     async saveMedTaken() {
       const currentMedTaken = {
-        dateTime: new Date(this.dateTime).toISOString(),
+        dateTime: moment(this.dateTime).format("D MMMM YYYY, HH:mm"),
         leftOrRight: this.leftOrRight,
         place: this.place,
       };
