@@ -1,1 +1,6 @@
-{}
+{
+	"appId": "nl.joseewouters.karin",
+	"appName": "karin",
+	"webDir": "dist",
+	"bundledWebRuntime": false
+}
