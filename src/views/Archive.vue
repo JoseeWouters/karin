@@ -51,9 +51,8 @@ export default {
       recentMedsTaken: [],
     };
   },
-  beforeRouteUpdate(next) {
+  async ionViewWillEnter() {
     this.getMedsTaken();
-    next();
   },
   async mounted() {
     await storage.create();
