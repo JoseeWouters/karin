@@ -52,9 +52,6 @@ export default {
     };
   },
   async ionViewWillEnter() {
-    this.getMedsTaken();
-  },
-  async mounted() {
     await storage.create();
     this.getMedsTaken();
   },

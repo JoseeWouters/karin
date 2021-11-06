@@ -48,8 +48,11 @@
       <ion-button @click="saveMedTaken">Toevoegen</ion-button>
       <ion-list>
         <ion-item v-for="medTaken in recentMedsTaken" :key="medTaken.date">
-          <ion-label>{{medTaken.dateTime}}</ion-label>
-          <p><span>{{medTaken.leftOrRight}}</span> - <span>{{medTaken.place}}</span></p>
+          <ion-label>{{ medTaken.dateTime }}</ion-label>
+          <p>
+            <span>{{ medTaken.leftOrRight }}</span> -
+            <span>{{ medTaken.place }}</span>
+          </p>
         </ion-item>
       </ion-list>
     </ion-content>
@@ -73,7 +76,7 @@ import {
 } from "@ionic/vue";
 import { orderBy } from "lodash";
 import { Storage } from "@ionic/storage";
-import moment from 'moment';
+import moment from "moment";
 const storage = new Storage();
 export default {
   name: "Home",
@@ -99,6 +102,12 @@ export default {
       recentMedsTaken: [],
     };
   },
+  ionViewWillEnter() {
+    if (this.dateTime !== moment().format()) {
+      console.log("updating time");
+      this.dateTime = moment().format();
+    }
+  },
   async mounted() {
     await storage.create();
     this.getMedsTaken();
@@ -111,7 +120,7 @@ export default {
     },
 
     sortRecentMedsTaken(medsTaken) {
-      this.recentMedsTaken = orderBy(medsTaken, "dateTime", "desc").slice(0,3);
+      this.recentMedsTaken = orderBy(medsTaken, "dateTime", "desc").slice(0, 3);
     },
 
     async saveMedTaken() {
@@ -121,7 +130,7 @@ export default {
         place: this.place,
       };
 
-      await storage.get("medsTaken").then( (res) => {
+      await storage.get("medsTaken").then((res) => {
         const medsTaken = res ? res : [];
         medsTaken.push(currentMedTaken);
         storage.set("medsTaken", medsTaken);
